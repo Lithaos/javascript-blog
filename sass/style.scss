@@ -2,16 +2,21 @@
 
 /* Variables */
 
-$color-light: #fff;
-$color-dark: #444;
+$color-light:#f1f2f6;
+$color-dark:#2f3542;
 
-$font-logo: 'Sacramento', cursive;
-$font-header: 'Oswald', sans-serif;
-$font-text: 'Source Sans Pro', sans-serif;
+$font-logo: 'Sacramento',
+cursive;
+$font-header: 'Oswald',
+sans-serif;
+$font-text: 'Source Sans Pro',
+sans-serif;
 
 /* Global */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -34,6 +39,7 @@ body {
   text-transform: uppercase;
   font-family: $font-header;
   font-weight: 600;
+
   span {
     text-transform: none;
     font-weight: 400;
@@ -54,14 +60,22 @@ body {
 
 .posts {
   flex: 2 0 0;
+  position: relative;
+
 }
 
-.sidebar, .posts {
+.sidebar,
+.posts {
   background: $color-light;
   margin-right: 10px;
   padding: 40px;
   border: 1px solid $color-dark;
   border-radius: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: #ff4757;
 }
 
 /* Logo */
@@ -80,6 +94,7 @@ body {
   list-style-type: none;
   margin: 0;
   padding: 0;
+
   .active {
     font-weight: bold;
   }
@@ -102,9 +117,15 @@ body {
 /* Post */
 
 .post {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  z-index: 1;
+  transition: 1s;
+
   &.active {
-    display: block;
+    position: inherit;
+    z-index: 100;
+    opacity: 1;
   }
 }
 
@@ -114,6 +135,7 @@ body {
 
 .post-tags {
   display: flex;
+
   p {
     margin: 0 10px 0 0;
   }

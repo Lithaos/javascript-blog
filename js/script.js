@@ -10,6 +10,13 @@ const opts = {
   cloudClassPrefix: 'tag-size-',
   authorsListSelector: '.list.authors'
 }
+const templates = {
+  articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
+  tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
+  authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
+  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
+  authorCloudLink: Handlebars.compile(document.querySelector('#template-author-cloud-link').innerHTML)
+}
 
 function titleClickHandler(event) {
   event.preventDefault();
@@ -58,7 +65,11 @@ function generateTitleLinks(customSelector = '') {
     /* get the title from the title element */
     const articleTitle = article.querySelector(opts.titleSelector).innerHTML;
     /* create HTML of the link */
-    const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
+    const linkHTMLData = {
+      id: articleId,
+      title: articleTitle
+    };
+    const linkHTML = templates.articleLink(linkHTMLData);
     html = html + linkHTML;
   }
 
@@ -111,7 +122,11 @@ function generateTags() {
     /* START LOOP: for each tag */
     for (let tag of tags) {
       /* check if this link is NOT already in allTags */
-      const linkHTML = '<li><a href="#tag-' + tag + '"> ' + tag + ' </a></li> ';
+      const linkHTMLData = {
+        id: tag,
+        tagName: tag
+      };
+      const linkHTML = templates.tagLink(linkHTMLData);
       if (!allTags.hasOwnProperty(tag)) {
         /* add generated code to allTags array */
         allTags[tag] = 1;
@@ -128,15 +143,19 @@ function generateTags() {
   const tagList = document.querySelector(opts.tagsListSelector);
   /* Create variable for all links HTML code */
   const tagsParams = calculateTagsParams(allTags);
-  let allTagsHTML = '';
+  const allTagsData = {tags: []};
   /* START LOOP: for each tag in allTags:*/
   for (let tag in allTags) {
     /* generate code of a link and add it to allTagsHTML */
-    allTagsHTML += '<li><a href="#tag-' + tag + '"' + 'class="' + opts.cloudClassPrefix + calculateTagClass(allTags[tag], tagsParams) + '"> ' + tag + ' </a></li>';
-    /* End loop: for each tag in allTags: */
+    allTagsData.tags.push({
+      tag: tag,
+      count: allTags[tag],
+      prefix: opts.cloudClassPrefix,
+      className: calculateTagClass(allTags[tag], tagsParams)
+    });/* End loop: for each tag in allTags: */
   }
   /* add html from allTagsHTML to tagList */
-  tagList.innerHTML = allTagsHTML;
+  tagList.innerHTML = templates.tagCloudLink(allTagsData);
 }
 
 generateTags();
@@ -196,7 +215,11 @@ function generateAuthors() {
     /* get author from data-author attribute */
     let author = article.getAttribute('data-author');
     /* generate HTML of the link */
-    const linkHTML = 'by <a href="#' + author + '"> ' + author + ' </a>';
+    const linkHTMLData = {
+      id: author,
+      name: author
+    };
+    const linkHTML = templates.authorLink(linkHTMLData);
     /* insert HTML of author link into the author wrapper */
     if (!allAuthors.hasOwnProperty(author)) {
       allAuthors[author] = 1;
@@ -209,11 +232,18 @@ function generateAuthors() {
   }
   const authorList = document.querySelector(opts.authorsListSelector);
   const authorParams = calculateTagsParams(allAuthors);
-  let allAuthorsHTML = '';
+  const allAuthorsData = {authors: []}
   for (let author in allAuthors) {
-    allAuthorsHTML += '<li><a href="#' + author + '"' + 'class="' + opts.cloudClassPrefix + calculateTagClass(allAuthors[author], authorParams) + '"> ' + author + ' </a></li>';
-  }
-  authorList.innerHTML = allAuthorsHTML
+    allAuthorsData.authors.push({
+      author: author,
+      prefix: opts.cloudClassPrefix,
+      count: allAuthors[author],
+      className: calculateTagClass(allAuthors[author], authorParams)
+    });
+}
+
+console.log(allAuthorsData);
+  authorList.innerHTML = templates.authorCloudLink(allAuthorsData);
 }
 
 generateAuthors();

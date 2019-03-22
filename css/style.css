@@ -92,7 +92,7 @@ a {
 
 /* Authors */
 .authors li {
-  margin-bottom: 12px;
+  display: inline;
 }
 
 /* Post */
@@ -140,5 +140,9 @@ a {
 
 .tag-size-1 {
   font-size: 12px;
+}
+
+.tags li {
+  display: inline;
 }
 /*# sourceMappingURL=style.css.map */

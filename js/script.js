@@ -193,19 +193,14 @@ function tagClickHandler(event) {
 
 function addClickListenersToTags() {
   /* find all links to tags */
-  const links = document.querySelectorAll('.post-tags a');
-  const cloud = document.querySelectorAll('.tags li a')
+  const links = document.querySelectorAll('a[href^="#tag-"]');
   /* START LOOP: for each link */
   for (let link of links) {
     /* add tagClickHandler as event listener for that link */
     link.addEventListener('click', tagClickHandler);
     /* END LOOP: for each link */
   }
-  for (let tag of cloud) {
-    /* add tagClickHandler as event listener for that link */
-    tag.addEventListener('click', tagClickHandler);
-    /* END LOOP: for each link */
-  }
+
 }
 
 addClickListenersToTags();
@@ -249,7 +244,6 @@ function generateAuthors() {
     });
 }
 
-console.log(allAuthorsData);
   authorList.innerHTML = templates.authorCloudLink(allAuthorsData);
 }
 
@@ -279,13 +273,14 @@ function authorClickHandler(event) {
     /* END LOOP: for each found tag link */
   }
   /* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks('[data-author="' + href.replace('#', '') + '"]');
+  generateTitleLinks('[data-author~="' + href.replace('#author-', '') + '"]');
+
 }
 
 function addClickListenersToAuthors() {
   /* find all links to authors */
-  const links = document.querySelectorAll(opts.articleAuthorSelector + ' a');
-  const cloud = document.querySelectorAll('.authors li a');
+  const links = document.querySelectorAll('a[href^="#author-"]');
+ 
   /* START LOOP: for each link */
   for (let link of links) {
     /* add authorClickHandler as event listener for that link */
@@ -293,10 +288,5 @@ function addClickListenersToAuthors() {
     /* END LOOP: for each link */
   }
 
-  for (let author of cloud) {
-    /* add authorClickHandler as event listener for that link */
-    author.addEventListener('click', authorClickHandler);
-    /* END LOOP: for each link */
-  }
 }
 addClickListenersToAuthors();

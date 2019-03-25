@@ -9,14 +9,15 @@ const opts = {
   cloudClassCount: 5,
   cloudClassPrefix: 'tag-size-',
   authorsListSelector: '.list.authors'
-}
+};
+
 const templates = {
   articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
   tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
   authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
   tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
-  authorCloudLink: Handlebars.compile(document.querySelector('#template-author-cloud-link').innerHTML)
-}
+  authorCloudLink: Handlebars.compile(document.querySelector('#template-author-cloud-link').innerHTML),
+};
 
 function titleClickHandler(event) {
   event.preventDefault();
@@ -179,7 +180,7 @@ function tagClickHandler(event) {
     /* END LOOP: for each active tag link */
   }
   /* find all tag links with "href" attribute equal to the "href" constant */
-  const tagHref = document.querySelectorAll('a[href="' + href + '"]');
+  const tagHref = document.querySelectorAll('a[href^="' + href + '"]');
   /* START LOOP: for each found tag link */
   for (let tag of tagHref) {
     /* add class active */
@@ -193,10 +194,16 @@ function tagClickHandler(event) {
 function addClickListenersToTags() {
   /* find all links to tags */
   const links = document.querySelectorAll('.post-tags a');
+  const cloud = document.querySelectorAll('.tags li a')
   /* START LOOP: for each link */
   for (let link of links) {
     /* add tagClickHandler as event listener for that link */
     link.addEventListener('click', tagClickHandler);
+    /* END LOOP: for each link */
+  }
+  for (let tag of cloud) {
+    /* add tagClickHandler as event listener for that link */
+    tag.addEventListener('click', tagClickHandler);
     /* END LOOP: for each link */
   }
 }
@@ -232,7 +239,7 @@ function generateAuthors() {
   }
   const authorList = document.querySelector(opts.authorsListSelector);
   const authorParams = calculateTagsParams(allAuthors);
-  const allAuthorsData = {authors: []}
+  const allAuthorsData = {authors: []};
   for (let author in allAuthors) {
     allAuthorsData.authors.push({
       author: author,
@@ -278,10 +285,17 @@ function authorClickHandler(event) {
 function addClickListenersToAuthors() {
   /* find all links to authors */
   const links = document.querySelectorAll(opts.articleAuthorSelector + ' a');
+  const cloud = document.querySelectorAll('.authors li a');
   /* START LOOP: for each link */
   for (let link of links) {
     /* add authorClickHandler as event listener for that link */
     link.addEventListener('click', authorClickHandler);
+    /* END LOOP: for each link */
+  }
+
+  for (let author of cloud) {
+    /* add authorClickHandler as event listener for that link */
+    author.addEventListener('click', authorClickHandler);
     /* END LOOP: for each link */
   }
 }
